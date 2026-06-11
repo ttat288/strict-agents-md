@@ -1,20 +1,26 @@
 # strict-agents-md
 
-A minimal instruction framework for AI coding agents.
+A minimal project-governance framework for coding agents.
 
-Store decisions, not advice. Route context, do not preload it.
+A minimal instruction framework that teaches coding agents what makes your project different.
 
 ## Why This Exists
 
-AI coding agents often fail in predictable ways:
+This is not a prompt pack.
+This is a small project-governance layer for AI coding agents.
 
-- editing before tracing
-- rewriting working code
-- duplicating existing helpers
-- adding speculative abstractions
-- skipping verification
+Most coding agents already know software engineering. What they usually lack is project-specific context:
 
-`strict-agents-md` keeps agent instructions short and moves project-specific decisions into `PROJECT.md`. The goal is to avoid generic context files that make agents over-explore while still giving them the stable decisions they cannot infer safely.
+- architectural decisions already made
+- shared patterns the team intentionally uses
+- legacy areas that should not be touched
+- migrations currently in progress
+- deliberate exceptions
+- source-of-truth locations
+
+`strict-agents-md` keeps agent behavior in `AGENTS.md`, stable project decisions in `PROJECT.md`, and optional deeper context in `knowledge/*`.
+
+The goal is to help coding agents preserve project decisions, reduce architectural drift, and avoid loading unrelated context.
 
 ## Quick Start
 
@@ -27,6 +33,25 @@ curl -o PROJECT.md https://raw.githubusercontent.com/ttat288/strict-agents-md/ma
 
 Then edit `PROJECT.md` by hand with the stable decisions that are unique to your project.
 
+For a small repo, this is usually enough:
+
+```txt
+/
+|-- AGENTS.md
+`-- PROJECT.md
+```
+
+For a larger repo, add `knowledge/` only when stable domain context becomes too detailed for `PROJECT.md`:
+
+```txt
+/
+|-- AGENTS.md
+|-- PROJECT.md
+`-- knowledge/
+```
+
+Agents should read `knowledge/*` only when the current task needs that deeper context.
+
 For tool-specific setup, copy `AGENTS.md` and `PROJECT.md` first, then copy the matching wrapper into the same project:
 
 | Tool | Wrapper |
@@ -34,6 +59,7 @@ For tool-specific setup, copy `AGENTS.md` and `PROJECT.md` first, then copy the 
 | Claude Code | [`examples/claude/CLAUDE.md`](examples/claude/CLAUDE.md) |
 | Cursor | [`examples/cursor/.cursor/rules/base.mdc`](examples/cursor/.cursor/rules/base.mdc) |
 | GitHub Copilot | [`examples/copilot/.github/copilot-instructions.md`](examples/copilot/.github/copilot-instructions.md) |
+| Codex-compatible agents | root [`AGENTS.md`](AGENTS.md) |
 
 Wrappers are intentionally small. They should point the tool back to the root `AGENTS.md`; they should not duplicate or replace the base rules.
 
@@ -43,22 +69,43 @@ Wrappers are intentionally small. They should point the tool back to the root `A
 - `PROJECT.md`: stable project decisions, active transitions, exceptions, and source-of-truth locations.
 - `knowledge/*`: optional deeper domain context for large projects.
 
-## What It Enforces
+Current code defines reality. `Active Transitions` define the future direction.
 
-- Make the smallest useful change.
-- Read stable project decisions before guessing.
-- Route deeper context only when the task needs it.
-- Prefer current code over stale documentation.
-- Prefer explicit project decisions over local habits.
-- Keep wrappers thin.
+## Why Decisions Matter
 
-## Design Principles
+Generic advice like "think carefully" competes for context without telling the agent what is unique about the project.
 
-- Keep the base files short enough to read every session.
-- Keep tool wrappers thin.
-- Put project-specific decisions in `PROJECT.md`.
-- Split extra rules only when they prevent agents from reading unrelated details.
-- Prefer decisions over generic advice.
+Project decisions are more useful because they are specific:
+
+- which API client is canonical
+- which legacy path should stay untouched
+- which migration target new work should follow
+- which schema, config, or route file is the source of truth
+- which exceptions are intentional
+
+## Small Repos
+
+Use only `AGENTS.md` and `PROJECT.md`.
+
+Keep `PROJECT.md` short enough to review by hand. Put stable choices there, not temporary notes or task-specific findings.
+
+## Large Repos
+
+Keep `AGENTS.md` as the behavior router.
+
+Use `PROJECT.md` for stable decisions, active transitions, known exceptions, and source-of-truth locations.
+
+Add `knowledge/*` only for deeper domain-specific context that agents should read selectively. Do not preload every area of the system into every session.
+
+## Tool Wrappers
+
+Claude Code, Cursor, and GitHub Copilot can use their own instruction files, but those files should stay thin:
+
+```md
+Use the repository instructions in `AGENTS.md`.
+```
+
+For Codex-compatible agents, place `AGENTS.md` at the repository root.
 
 ## Examples
 
@@ -70,6 +117,8 @@ Wrappers are intentionally small. They should point the tool back to the root `A
 ## Philosophy
 
 Minimize instructions. Centralize decisions. Route domain knowledge. Track transitions explicitly.
+
+Teach the agent the project, not software engineering.
 
 ## License
 
