@@ -4,9 +4,27 @@ A small, strict, project-agnostic `AGENTS.md` template for AI coding agents.
 
 Copy one file. Make AI code safer.
 
-## Use It
+## Why This Exists
 
-Copy [`AGENTS.md`](AGENTS.md) into the root of your project.
+AI coding agents often fail in predictable ways:
+
+- editing before tracing
+- rewriting working code
+- duplicating existing helpers
+- adding speculative abstractions
+- skipping verification
+
+`strict-agents-md` is a strict base template that pushes agents toward small, traceable, verified diffs. It is not a replacement for project-specific instructions; it is the base layer you copy first.
+
+## Quick Start
+
+Copy [`AGENTS.md`](AGENTS.md) into the root of your project:
+
+```sh
+curl -o AGENTS.md https://raw.githubusercontent.com/ttat288/strict-agents-md/main/AGENTS.md
+```
+
+Or copy it manually from this repository.
 
 For tool-specific setup, copy `AGENTS.md` first, then copy the matching wrapper into the same project:
 
@@ -21,10 +39,26 @@ Wrappers are intentionally small. They should point the tool back to the root `A
 ## What It Enforces
 
 - Trace before editing.
-- Make the smallest required change.
+- Make the smallest useful change.
 - Reuse existing patterns.
 - Avoid duplicate logic.
-- Verify before the final response.
+- Verify before responding.
+- Keep git actions explicit.
+
+## Design Principles
+
+- Keep the base file short enough to read every session.
+- Keep tool wrappers thin.
+- Put project-specific details in the project that uses the template.
+- Split extra rules only when they prevent agents from reading unrelated details.
+- Prefer clear rules over exhaustive policy.
+
+## Examples
+
+- [`examples/minimal`](examples/minimal): the smallest useful setup.
+- [`examples/claude`](examples/claude): Claude Code wrapper.
+- [`examples/cursor`](examples/cursor): Cursor rules wrapper.
+- [`examples/copilot`](examples/copilot): GitHub Copilot instructions wrapper.
 
 ## Philosophy
 
