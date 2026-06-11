@@ -1,10 +1,9 @@
 # GitHub Copilot Instructions
 
-Read and follow `AGENTS.md` first.
+The repository root `AGENTS.md` is the source of truth.
 
-For every code task:
+Before doing any work:
 
-- Trace before editing.
-- Change only what is required.
-- Reuse existing patterns.
-- Verify before the final response.
+- Read and follow `AGENTS.md`.
+- If `AGENTS.md` is missing, stop and ask the user to add it.
+- If this file conflicts with `AGENTS.md`, follow `AGENTS.md`.

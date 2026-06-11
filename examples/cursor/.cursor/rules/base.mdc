@@ -5,9 +5,10 @@ alwaysApply: true
 
 Read and follow `AGENTS.md` first.
 
-For every code task:
+The repository root `AGENTS.md` is the source of truth.
 
-- Trace before editing.
-- Change only what is required.
-- Reuse existing patterns.
-- Verify before the final response.
+Before doing any work:
+
+- Read and follow `AGENTS.md`.
+- If `AGENTS.md` is missing, stop and ask the user to add it.
+- If this file conflicts with `AGENTS.md`, follow `AGENTS.md`.
