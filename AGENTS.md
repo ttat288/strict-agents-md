@@ -1,135 +1,108 @@
 # AGENTS.md
 
-Universal rules for AI coding agents working in this repository.
+Canonical instructions for AI coding agents.
 
-Use this file as the small mandatory base. Keep it strict, readable, and project-agnostic. Put path-specific, framework-specific, or tool-specific details in separate files only when they are truly needed.
+## Goal
 
----
+Minimize instructions. Centralize decisions. Route domain knowledge. Track transitions explicitly.
 
-## Core Rule
+The agent should spend its context budget learning what is unique about this project,
+not relearning how to be an engineer.
 
-Trace first. Change little. Verify.
+## Required Context
 
-Do not guess. Do not rewrite working code. Do not add speculative abstractions. Every changed line must map to the user request.
+Always read:
 
----
+- `AGENTS.md`
+- `PROJECT.md`
 
-## Think Before Coding
+Read only the relevant file under `knowledge/` when deeper area-specific context is needed.
 
-Before editing, understand the existing implementation.
+## Operating Rules
 
-- Read the files directly related to the request.
-- Trace the caller, callee, data flow, and ownership boundary.
-- Search for existing helpers, constants, services, components, and patterns before creating new ones.
-- State a risky or unclear assumption before acting on it.
-- Ask one focused question only when ambiguity blocks safe work.
+- Make the smallest correct change that satisfies the current request.
+- Do not refactor, rename, reformat, or clean unrelated code unless requested.
+- For behavior-changing code edits, trace the smallest affected path before editing.
+- Skip deep tracing for docs, copy, style-only, or trivial config changes unless behavior is involved.
+- Reuse existing code patterns before introducing new ones.
+- Prefer consistency with the surrounding code being modified unless doing so would violate an explicit project decision.
+- Do not invent APIs, data contracts, file paths, libraries, or architecture decisions.
+- Do not introduce abstractions, extension points, or configuration layers unless required by the current request or already exist nearby.
 
-For questions, explanations, reviews, or commit text, answer the request directly. Do not inspect or edit unrelated files.
+## Scope Control
 
----
+If the requested change reveals unrelated issues:
 
-## Simplicity First
+- Mention them briefly.
+- Do not fix them unless requested.
 
-Use the minimum change that solves the task.
+## Escalation
 
-- No features beyond what was asked.
-- No configurability that was not requested.
-- No abstraction for single-use code.
-- No broad rewrites.
-- No defensive branches for impossible states.
-- No new dependency unless clearly necessary.
+Ask for clarification when:
 
-If the solution feels clever, simplify it.
+- Multiple reasonable implementations exist and the choice affects architecture, public behavior, data contracts, or long-term maintainability.
+- The task requires choosing a new architecture or dependency.
+- The request conflicts with project decisions.
+- The requested behavior is ambiguous and could lead to a wrong implementation.
 
----
+For low-risk choices, make the smallest reasonable assumption and state it briefly.
 
-## Surgical Changes
+## Context Routing
 
-Touch only files required by the task.
+Use `PROJECT.md` for stable decisions, active transitions, known exceptions, and source-of-truth locations.
 
-- Do not format unrelated files.
-- Do not rename unrelated symbols.
-- Do not clean unrelated dead code.
-- Do not refactor nearby working code.
-- Do not change public behavior unless requested.
-- Remove only unused code created by your own change.
+Use `knowledge/*` only for deeper domain-specific context when the task needs it.
 
-Every changed line should be easy to explain from the user request.
+When uncertainty may affect architecture, data contracts, shared patterns, public behavior, or migration direction, read the relevant project context first.
 
----
+## Source Precedence
 
-## Reuse Existing Patterns
+For implementation choices:
 
-Prefer the nearest working pattern in the repository.
+1. Current user request
+2. This `AGENTS.md`
+3. `PROJECT.md` / `knowledge/*`
+4. Existing local patterns
 
-Before adding new logic, search in this order:
+For project facts:
 
-1. Current file
-2. Current folder
-3. Current package or module
-4. Shared utilities, constants, services, and components
-5. Existing docs and rules
+1. Current codebase
+2. package.json / config / schema / migrations
+3. `PROJECT.md` / `knowledge/*`
+4. Comments and old docs
 
-Avoid duplicate validation, enum lists, payload builders, permission checks, formatters, parsers, mappers, retry logic, and UI states. If duplication intentionally remains, explain why.
+When code and project documentation disagree, check whether the repository is in an active transition before choosing a direction.
 
----
+If an active transition exists:
 
-## Source of Truth
+- Use the target direction for new work.
+- Preserve legacy code unless migration is explicitly requested.
+- Do not mix old and new patterns in the same changed area unless the existing boundary already does.
+- Mention the transition in the final response when it affects the implementation.
 
-Edit the true source, not generated output.
+If no active transition exists, follow the current code and mention the documentation mismatch.
 
-Do not edit `dist/`, `build/`, generated files, copied mirrors, vendored code, or lockfiles unless the task requires it.
+## Project Documentation Ownership
 
-If a new rule file is needed, keep `AGENTS.md` as the base and link from it only when the split prevents unnecessary reading.
+`PROJECT.md` and `knowledge/*` should be reviewed by humans.
 
----
+Agent-generated updates are suggestions until accepted.
 
-## Verification
+Do not update `PROJECT.md` or `knowledge/*` unless requested, or unless the task explicitly includes maintaining project documentation.
 
-Verify the smallest relevant surface before finishing.
+Do not add unstable, one-off, or unreviewed patterns to project context.
 
-- Run targeted tests, type checks, lint checks, or manual checks when available and reasonable.
-- For bugs, trace the root cause before coding and verify the failing path.
-- For UI or state changes, check loading, success, error, empty, retry, and reset states when applicable.
-- If checks cannot be run, say why.
+## Context File Control
 
-Do not claim a check passed unless it actually ran.
+- Do not create new agent/context Markdown files unless requested.
+- Do not split project context into new files unless the existing file is becoming too large or hard to navigate.
 
----
-
-## Git Safety
-
-Read-only git commands are allowed when useful for tracing changes.
-
-Do not commit, push, reset, rebase, force-push, discard changes, or rewrite history unless the user explicitly asks.
-
-Never overwrite user changes.
-
----
-
-## Security
-
-Never expose secrets.
-
-Do not perform destructive or production-impacting actions without explicit user approval.
-
-For irreversible actions, use clear full prose and wait for confirmation.
-
----
-
-## Final Response
-
-Be concise and concrete.
+## Final Response For Code Changes
 
 Include:
 
-- What changed.
-- Files touched.
-- Checks run, or why checks were not run.
-- Known risk or edge case, if any.
-
-For bug fixes, include the root cause.
-
----
-
-Small diff. Clear reason. Verified result.
+- files changed
+- root cause, if fixing a bug
+- checks run
+- checks not run, if any
+- notable risk

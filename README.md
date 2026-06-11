@@ -1,8 +1,8 @@
 # strict-agents-md
 
-A small, strict, project-agnostic `AGENTS.md` template for AI coding agents.
+A minimal instruction framework for AI coding agents.
 
-Copy one file. Make AI code safer.
+Store decisions, not advice. Route context, do not preload it.
 
 ## Why This Exists
 
@@ -14,19 +14,20 @@ AI coding agents often fail in predictable ways:
 - adding speculative abstractions
 - skipping verification
 
-`strict-agents-md` is a strict base template that pushes agents toward small, traceable, verified diffs. It is not a replacement for project-specific instructions; it is the base layer you copy first.
+`strict-agents-md` keeps agent instructions short and moves project-specific decisions into `PROJECT.md`. The goal is to avoid generic context files that make agents over-explore while still giving them the stable decisions they cannot infer safely.
 
 ## Quick Start
 
-Copy [`AGENTS.md`](AGENTS.md) into the root of your project:
+Copy [`AGENTS.md`](AGENTS.md) and [`PROJECT.md`](PROJECT.md) into the root of your project:
 
 ```sh
 curl -o AGENTS.md https://raw.githubusercontent.com/ttat288/strict-agents-md/main/AGENTS.md
+curl -o PROJECT.md https://raw.githubusercontent.com/ttat288/strict-agents-md/main/PROJECT.md
 ```
 
-Or copy it manually from this repository.
+Then edit `PROJECT.md` by hand with the stable decisions that are unique to your project.
 
-For tool-specific setup, copy `AGENTS.md` first, then copy the matching wrapper into the same project:
+For tool-specific setup, copy `AGENTS.md` and `PROJECT.md` first, then copy the matching wrapper into the same project:
 
 | Tool | Wrapper |
 | --- | --- |
@@ -36,22 +37,28 @@ For tool-specific setup, copy `AGENTS.md` first, then copy the matching wrapper 
 
 Wrappers are intentionally small. They should point the tool back to the root `AGENTS.md`; they should not duplicate or replace the base rules.
 
+## File Roles
+
+- `AGENTS.md`: how the agent should work.
+- `PROJECT.md`: stable project decisions, active transitions, exceptions, and source-of-truth locations.
+- `knowledge/*`: optional deeper domain context for large projects.
+
 ## What It Enforces
 
-- Trace before editing.
 - Make the smallest useful change.
-- Reuse existing patterns.
-- Avoid duplicate logic.
-- Verify before responding.
-- Keep git actions explicit.
+- Read stable project decisions before guessing.
+- Route deeper context only when the task needs it.
+- Prefer current code over stale documentation.
+- Prefer explicit project decisions over local habits.
+- Keep wrappers thin.
 
 ## Design Principles
 
-- Keep the base file short enough to read every session.
+- Keep the base files short enough to read every session.
 - Keep tool wrappers thin.
-- Put project-specific details in the project that uses the template.
+- Put project-specific decisions in `PROJECT.md`.
 - Split extra rules only when they prevent agents from reading unrelated details.
-- Prefer clear rules over exhaustive policy.
+- Prefer decisions over generic advice.
 
 ## Examples
 
@@ -62,7 +69,7 @@ Wrappers are intentionally small. They should point the tool back to the root `A
 
 ## Philosophy
 
-Small diff. Clear reason. Verified result.
+Minimize instructions. Centralize decisions. Route domain knowledge. Track transitions explicitly.
 
 ## License
 
