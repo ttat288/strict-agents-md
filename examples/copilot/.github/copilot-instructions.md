@@ -1,0 +1,10 @@
+# GitHub Copilot Instructions
+
+Read and follow `AGENTS.md` first.
+
+For every code task:
+
+- Trace before editing.
+- Change only what is required.
+- Reuse existing patterns.
+- Verify before the final response.
